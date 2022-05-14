@@ -6,7 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 
 # Verisetini yükleme 2006 2020 Türkiye verileri
-dataset = pd.read_csv('..\MP2\data.csv',sep=";")
+dataset = pd.read_csv('data.csv',sep=";")
 dataset = dataset.apply(lambda x:x.str.replace(",","."))
 
 dataset['issizlik'] = dataset['issizlik'].astype('float')

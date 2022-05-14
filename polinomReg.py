@@ -1,5 +1,6 @@
 from ctypes import alignment
 from doctest import master
+from tokenize import String
 from turtle import color
 from unittest import result
 from numpy import pad
@@ -22,12 +23,12 @@ dataset['enflasyon'] = dataset['enflasyon'].astype('float')
 
 
 # Veriseti Hakkında Bilgi edinme
-print(dataset.shape)
-print(" ")
-print(dataset.describe())
-print(" ")
-dataset.info()
-print(" ")
+# print(dataset.shape)
+# print(" ")
+# print(dataset.describe())
+# print(" ")
+# dataset.info()
+# print(" ")
 
 # X bagımsız degısklenler y bagımlı degıskenler temsil etmekte
 x = dataset.iloc[:, 1:2].values
@@ -37,12 +38,6 @@ y = dataset.iloc[:, 2].values
 # lineer Regresyon egıtım modelını olusturmakta
 lin_reg = LinearRegression()
 lin_reg.fit(x,y)
-
-
-# Eğim değeri
-print('Egim Degeri: ',lin_reg.coef_)
-print(" ")
-
 
 # Kordinat sisteminde Dogrusal verilerin görünmesi
 # plt.scatter(x,y,color = 'red')
@@ -56,8 +51,8 @@ print(" ")
 poly_reg = PolynomialFeatures(degree=4)
 x_poly = poly_reg.fit_transform(x)
 
-lin_reg2 = LinearRegression()
-lin_reg2.fit(x_poly,y)
+poly_reg2= LinearRegression()
+poly_reg2.fit(x_poly,y)
 
 
 
@@ -70,41 +65,41 @@ lin_reg2.fit(x_poly,y)
 
 
 # Veriler üzerinde tahmin yaparak dogruluk oranının tespiti
-print(lin_reg.predict([[25]]))
+
 print(lin_reg.predict([[5]]))
 print(lin_reg.score(x,y))
 
 print(" ")
 
-print(lin_reg2.predict(poly_reg.fit_transform([[25]])))
-print(lin_reg2.predict(poly_reg.fit_transform([[5]])))
-print(lin_reg2.score(x_poly,y))
+print(poly_reg2.predict(poly_reg.fit_transform([[5]])))
+print(poly_reg2.score(x_poly,y))
 
 
 
 
 app = Tk()
 
+issizlik_type = float()
 
-issizlikType = float()
 input_label = Label(app,text='Işşizlik Oranı',font=('bold',14),padx=20,pady=20)
 input_label.grid(row=0,column=0,sticky=W)
-issizlik_entry = Entry(app,textvariable=issizlikType)
-issizlik_entry.grid(row=0,column=1)
-deneme1 = lin_reg2.predict(poly_reg.fit_transform([[10]]))
 
-res = deneme1[0]
+issizlik_entry = Entry(app,textvariable=issizlik_type)
+issizlik_entry.grid(row=0,column=1)
 
 
 
 def Show_result():
-    print(res)
-    
 
+    deneme1 = poly_reg2.predict(poly_reg.fit_transform([[issizlik_entry.get()]]))
+    res = deneme1[0]
+
+    myLabel = Label(app,text = res,font=('bold',14),padx=20,pady=20)
+    myLabel.grid(row=2,column=1)
+    
 
 submit_btn = Button(app,text='SUBMIT',width=12,command= Show_result)
 submit_btn.grid(row=1,column=1)
-
 
 app.title('Enflasyon Tahmini')
 app.geometry('400x400')
